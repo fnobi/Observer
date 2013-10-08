@@ -56,3 +56,12 @@ sliderController.observe(slider, {
         // finalize touch
     }
 });
+
+
+
+// use for init
+function init () {
+    // initialize code
+}
+
+new Observer().observe(window, 'load', init);
