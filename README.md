@@ -88,4 +88,13 @@ sliderController.observe(slider, {
     }
 });
 
+
+
+// use for init
+function init () {
+    // initialize code
+}
+
+new Observer().observe(window, 'load', init);
+
 ```
