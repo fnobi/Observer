@@ -30,4 +30,32 @@ describe('Observer', function () {
         el.dispatchEvent(event);
     });
 
+
+    it('listen multi event', function (done) {
+        var observer = new Observer();
+        var eventEmitter = new EventEmitter();
+
+        var flag_hoge = false;
+        var flag_moge = false;
+
+        observer.observe(eventEmitter, {
+            hoge: function (e) {
+                flag_hoge = true;
+                
+                if (flag_moge) {
+                    done();
+                }
+            },
+            moge: function (e) {
+                flag_moge = true;
+                
+                if (flag_hoge) {
+                    done();
+                }
+            }
+        });
+
+        eventEmitter.emit('hoge');
+        eventEmitter.emit('moge');
+    });
 });

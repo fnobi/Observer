@@ -23,6 +23,14 @@ Observer.DISPATCHERS = [{
 }];
 
 Observer.prototype.observe = function (target, type, fn) {
+    if (typeof type != 'string' && !fn) {
+        // multi event mode
+        for (var t in type) {
+            this.observe(target, t, type[t]);
+        }
+        return;
+    }
+
     var DISPATCHERS = Observer.DISPATCHERS;
 
     var name, dispatch;
