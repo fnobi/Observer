@@ -1,0 +1,51 @@
+name: Observer
+
+url:
+  http://observer.fnobi.com/
+
+repository:
+  git://github.com/fnobi/Observer.git
+
+title:
+  Observer
+
+description:
+  listen any event emitter.
+
+keywords: []
+
+favicon_url: ''
+
+viewport: 
+  - width=device-width
+  - initial-scale=1.0
+  - maximum-scale=1.0
+  - user-scalable=0
+
+ios_icon_url: ''
+
+facebook_app_id: ''
+
+ogp_type: 'website'
+
+ogp_image_url: ''
+ogp_image_width: 0
+ogp_image_height: 0
+
+
+sns:
+  twitter:
+    sharetext:
+      listen any event emitter.      
+    sharehashtag: []
+
+  facebook:
+    app_id: ''
+    sharetext:
+      listen any event emitter.
+
+ogp:
+  image: 
+    url: http://observer.fnobi.com//img/ogp-icon.png
+    width: 300
+    height: 300
