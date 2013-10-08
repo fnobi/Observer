@@ -161,7 +161,8 @@ module.exports = function (grunt) {
             config.mocha_html[name] = {
                 src   : [
                     path.resolve(env.sitePath, 'js', 'Observer.js'),
-                    'bower_components/EventEmitter/EventEmitter.js'
+                    'bower_components/EventEmitter/EventEmitter.js',
+                    'bower_components/inherits/inherits.js'
                 ],
                 test  : [ 'test/*-test.js' ],
                 assert : 'chai'

@@ -31,6 +31,14 @@ Observer.prototype.observe = function (target, type, fn) {
         return;
     }
 
+    if (typeof fn == 'string') {
+        fn = (function (self, method) {
+            return function () {
+                self[method].apply(this, arguments);
+            };
+        })(this, fn);
+    }
+
     var DISPATCHERS = Observer.DISPATCHERS;
 
     var name, dispatch;
@@ -40,6 +48,7 @@ Observer.prototype.observe = function (target, type, fn) {
 
         if (target[name]) {
             dispatch.apply(target, [type, fn]);
+            break;
         }
     }
 };
