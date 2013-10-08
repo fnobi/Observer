@@ -25,13 +25,13 @@ Observer.DISPATCHERS = [{
 Observer.prototype.observe = function (target, type, fn) {
     var DISPATCHERS = Observer.DISPATCHERS;
 
-    var name, dispatcher;
+    var name, dispatch;
     for (var i = 0; i < DISPATCHERS.length; i++) {
         name = DISPATCHERS[i].name;
-        dispatcher = DISPATCHERS[i].dispatcher;
+        dispatch = DISPATCHERS[i].dispatch;
 
         if (target[name]) {
-            dispatcher.apply(target, [type, fn]);
+            dispatch.apply(target, [type, fn]);
         }
     }
 };

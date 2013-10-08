@@ -16,4 +16,18 @@ describe('Observer', function () {
 
         eventEmitter.emit('hoge');
     });
+    
+    it('listen element', function (done) {
+        var observer = new Observer();
+        var el = document.createElement('a');
+
+        observer.observe(el, 'click', function (e) {
+            done();
+        });
+
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', false, true);
+        el.dispatchEvent(event);
+    });
+
 });
