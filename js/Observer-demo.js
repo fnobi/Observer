@@ -297,6 +297,176 @@
   shivDocument(document);
 
 }(this, document));
-window.addEventListener('load', function () {
-    new Observer();
-}, false);
+var inherits = function (Child, Parent) {
+    for (var i in Parent.prototype) {
+        if (Child.prototype[i]) {
+            continue;
+        }
+        Child.prototype[i] = Parent.prototype[i];
+    }
+};
+var EventEmitter = new Function ();
+
+EventEmitter.prototype.initEventEmitter = function () {
+    this._listeners = {};
+};
+
+EventEmitter.prototype.initEventEmitterType = function (type) {
+    if (!type) {
+        return;
+    }
+    this._listeners[type] = [];
+};
+
+EventEmitter.prototype.hasEventListener = function (type, fn) {
+    if (!this.listener) {
+        return false;
+    }
+
+    if (type && !this.listener[type]) {
+        return false;
+    }
+
+    return true;
+};
+
+EventEmitter.prototype.addListener = function (type, fn) {
+    if (!this._listeners) {
+        this.initEventEmitter();
+    }
+    if (!this._listeners[type]) {
+        this.initEventEmitterType(type);
+    }
+    this._listeners[type].push(fn);
+
+    this.emit('newListener', type, fn);
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function (type, fn) {
+    fn._onceListener = true;
+    this.addListener(type, fn);
+};
+
+EventEmitter.prototype.removeListener = function (type, fn) {
+    if (!this._listeners) {
+        return;
+    }
+    if (!this._listeners[type]) {
+        return;
+    }
+    if (!this._listeners[type].forEach) {
+        return;
+    }
+
+    if (!type) {
+        this.initEventEmitter();
+        this.emit('removeListener', type, fn);
+        return;
+    }
+    if (!fn) {
+        this.initEventEmitterType(type);
+        this.emit('removeListener', type, fn);
+        return;
+    }
+
+    var self = this;
+    this._listeners[type].forEach(function (listener, index) {
+        if (listener === fn) {
+            self._listeners[type].splice(index, 1);
+        }
+    });
+    this.emit('removeListener', type, fn);
+};
+
+EventEmitter.prototype.emit = function (type) {
+    if (!this._listeners) {
+        return;
+    }
+    if (!this._listeners[type]) {
+        return;
+    }
+    if (!this._listeners[type].forEach) {
+        return;
+    }
+
+    var self = this,
+        args = [].slice.call(arguments, 1);
+
+    this._listeners[type].forEach(function (listener) {
+        listener.apply(self, args);
+        if (listener._onceListener) {
+            self.removeListener(type, listener);
+        }
+    });
+};
+
+EventEmitter.prototype.listeners = function (type) {
+    if (!type) {
+        return undefined;
+    }
+    return this._listeners[type];
+};
+
+// jquery style alias
+EventEmitter.prototype.trigger = EventEmitter.prototype.emit;
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+var observer = new Observer();
+
+// listen element by "addEventListener" or "attachEvent"
+var btn = document.createElement('a');
+document.body.appendChild(btn);
+
+observer.observe(btn, 'click', function (e) {
+    e.preventDefault();
+    alert('btn click!');
+});
+
+
+// listen eventEmitter by "on"
+var eventEmitter = new EventEmitter();
+observer.observe(eventEmitter, 'hello', function (message) {
+    console.log('emit "hello"!');
+    console.log('message: %s', message);
+});
+
+eventEmitter.emit('hello', 'hogehoge');
+
+
+
+// use as parent class
+var Klass = function () {};
+inherits(Klass, Observer);
+
+Klass.prototype.clickListener = function (e) {
+    e.preventDefault();
+    alert('btn click!');
+};
+
+Klass.prototype.helloListener = function (message) {
+    console.log('emit "hello"!');
+    console.log('message: %s', message);
+};
+
+var obj = new Klass();
+obj.observe(btn,          'click', 'clickListener');
+obj.observe(eventEmitter, 'hello', 'helloListener');
+
+
+
+// set multi event
+var slider = document.createElement('div');
+var sliderController = new Observer();
+
+sliderController.observe(slider, {
+    touchstart: function () {
+        // init touch
+    },
+    touchmove: function () {
+        // process touch
+    },
+    touchend: function () {
+        // finalize touch
+    }
+});
