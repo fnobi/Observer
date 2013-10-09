@@ -9,7 +9,6 @@
 
 
 
-
 Observer
 ======
 
@@ -28,7 +27,7 @@ git clone git://github.com/fnobi/Observer.git
 ```
 
 ## usage
-```
+```javascript
 var observer = new Observer();
 
 // listen element by "addEventListener" or "attachEvent"
